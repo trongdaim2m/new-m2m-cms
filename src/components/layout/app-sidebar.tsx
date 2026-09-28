@@ -24,34 +24,52 @@ import {
   SidebarMenuSubItem,
   SidebarRail
 } from '@/components/ui/sidebar';
-import { UserAvatarProfile } from '@/components/user-avatar-profile';
 import { navGroups } from '@/config/nav-config';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { useClerk, useOrganization, useUser } from '@clerk/nextjs';
 import { useFilteredNavGroups } from '@/hooks/use-nav';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import * as React from 'react';
 import { Icons } from '../icons';
-import { OrgSwitcher } from '../org-switcher';
 
 export default function AppSidebar() {
   const pathname = usePathname();
   const { isOpen } = useMediaQuery();
-  const { user } = useUser();
-  const { organization } = useOrganization();
-  const { signOut } = useClerk();
   const router = useRouter();
   const filteredGroups = useFilteredNavGroups(navGroups);
+  const [userLabel, setUserLabel] = React.useState('CMS Admin');
 
   React.useEffect(() => {
-    // Side effects based on sidebar state changes
+    try {
+      const raw = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('m2m_cms_user='))
+        ?.split('=')
+        .slice(1)
+        .join('=');
+      if (raw) {
+        const user = JSON.parse(decodeURIComponent(raw)) as {
+          name?: string;
+          email?: string;
+        };
+        setUserLabel(user.name || user.email || 'CMS Admin');
+      }
+    } catch {
+      // ignore
+    }
   }, [isOpen]);
+
+  async function logout() {
+    await fetch('/api/cms/logout', { method: 'POST' });
+    router.replace('/auth/cms-login');
+    router.refresh();
+  }
 
   return (
     <Sidebar collapsible='icon'>
-      <SidebarHeader className='group-data-[collapsible=icon]:pt-4'>
-        <OrgSwitcher />
+      <SidebarHeader className='px-3 py-4 group-data-[collapsible=icon]:pt-4'>
+        <div className='truncate text-sm font-semibold'>M&amp;M CMS</div>
+        <div className='text-muted-foreground truncate text-xs'>Content Admin</div>
       </SidebarHeader>
       <SidebarContent className='overflow-x-hidden'>
         {filteredGroups.map((group) => (
@@ -123,7 +141,10 @@ export default function AppSidebar() {
                   />
                 }
               >
-                {user && <UserAvatarProfile className='h-8 w-8 rounded-lg' showInfo user={user} />}
+                <div className='flex min-w-0 flex-1 flex-col text-left'>
+                  <span className='truncate text-sm font-medium'>{userLabel}</span>
+                  <span className='text-muted-foreground truncate text-xs'>Signed in</span>
+                </div>
                 <Icons.chevronsDown className='ml-auto size-4' />
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -133,35 +154,11 @@ export default function AppSidebar() {
                 sideOffset={4}
               >
                 <DropdownMenuGroup>
-                  <DropdownMenuLabel className='p-0 font-normal'>
-                    <div className='px-1 py-1.5'>
-                      {user && (
-                        <UserAvatarProfile className='h-8 w-8 rounded-lg' showInfo user={user} />
-                      )}
-                    </div>
-                  </DropdownMenuLabel>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-
-                <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={() => router.push('/dashboard/profile')}>
-                    <Icons.account className='mr-2 h-4 w-4' />
-                    Profile
-                  </DropdownMenuItem>
-                  {organization && (
-                    <DropdownMenuItem onClick={() => router.push('/dashboard/billing')}>
-                      <Icons.creditCard className='mr-2 h-4 w-4' />
-                      Billing
-                    </DropdownMenuItem>
-                  )}
-                  <DropdownMenuItem onClick={() => router.push('/dashboard/notifications')}>
-                    <Icons.notification className='mr-2 h-4 w-4' />
-                    Notifications
-                  </DropdownMenuItem>
+                  <DropdownMenuLabel>{userLabel}</DropdownMenuLabel>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                  <DropdownMenuItem onClick={() => signOut({ redirectUrl: '/auth/sign-in' })}>
+                  <DropdownMenuItem onClick={() => void logout()}>
                     <Icons.logout aria-hidden className='mr-2 h-4 w-4' />
                     Sign out
                   </DropdownMenuItem>

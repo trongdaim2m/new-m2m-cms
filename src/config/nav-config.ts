@@ -1,204 +1,64 @@
 import { NavGroup } from '@/types';
 
-/**
- * Navigation configuration with RBAC support
- *
- * This configuration is used for both the sidebar navigation and Cmd+K bar.
- * Items are organized into groups, each rendered with a SidebarGroupLabel.
- *
- * RBAC Access Control:
- * Each navigation item can have an `access` property that controls visibility
- * based on permissions, plans, features, roles, and organization context.
- *
- * Examples:
- *
- * 1. Require organization:
- *    access: { requireOrg: true }
- *
- * 2. Require specific permission:
- *    access: { requireOrg: true, permission: 'org:teams:manage' }
- *
- * 3. Require specific plan:
- *    access: { plan: 'pro' }
- *
- * 4. Require specific feature:
- *    access: { feature: 'premium_access' }
- *
- * 5. Require specific role:
- *    access: { role: 'admin' }
- *
- * 6. Multiple conditions (all must be true):
- *    access: { requireOrg: true, permission: 'org:teams:manage', plan: 'pro' }
- *
- * Note: The `visible` function is deprecated but still supported for backward compatibility.
- * Use the `access` property for new items.
- */
+/** CMS navigation — content modules only. */
 export const navGroups: NavGroup[] = [
   {
-    label: 'Overview',
+    label: 'Content',
     items: [
       {
-        title: 'Dashboard',
-        url: '/dashboard/overview',
+        title: 'Pages',
+        url: '/dashboard/pages/home',
         icon: 'dashboard',
         isActive: false,
-        shortcut: ['d', 'd'],
+        items: [
+          { title: 'Homepage', url: '/dashboard/pages/home' },
+          { title: 'About', url: '/dashboard/pages/about' }
+        ]
+      },
+      {
+        title: 'News',
+        url: '/dashboard/news',
+        icon: 'post',
+        isActive: true,
         items: []
       },
       {
-        title: 'Workspaces',
-        url: '/dashboard/workspaces',
-        icon: 'workspace',
-        isActive: false,
-        items: []
-      },
-      {
-        title: 'Teams',
-        url: '/dashboard/workspaces/team',
-        icon: 'teams',
-        isActive: false,
-        items: [],
-        access: { requireOrg: true }
-      },
-      {
-        title: 'Product',
-        url: '/dashboard/product',
+        title: 'Projects',
+        url: '/dashboard/projects',
         icon: 'product',
-        shortcut: ['p', 'p'],
         isActive: false,
         items: []
       },
       {
-        title: 'Users',
-        url: '/dashboard/users',
-        icon: 'teams',
-        shortcut: ['u', 'u'],
+        title: 'Careers',
+        url: '/dashboard/jobs',
+        icon: 'user',
         isActive: false,
-        items: []
-      },
-      {
-        title: 'Kanban',
-        url: '/dashboard/kanban',
-        icon: 'kanban',
-        shortcut: ['k', 'k'],
-        isActive: false,
-        items: []
-      },
-      {
-        title: 'Chat',
-        url: '/dashboard/chat',
-        icon: 'chat',
-        shortcut: ['c', 'c'],
-        isActive: false,
-        items: []
-      },
-      {
-        title: 'AI Chat',
-        url: '/dashboard/ai-chat',
-        icon: 'sparkles',
-        shortcut: ['a', 'i'],
-        isActive: false,
-        items: []
-      }
-    ]
-  },
-  {
-    label: 'Elements',
-    items: [
-      {
-        title: 'Forms',
-        url: '#',
-        icon: 'forms',
-        isActive: true,
         items: [
-          {
-            title: 'Basic Form',
-            url: '/dashboard/forms/basic',
-            icon: 'forms',
-            shortcut: ['f', 'f']
-          },
-          {
-            title: 'Multi-Step Form',
-            url: '/dashboard/forms/multi-step',
-            icon: 'forms'
-          },
-          {
-            title: 'Sheet & Dialog',
-            url: '/dashboard/forms/sheet-form',
-            icon: 'forms'
-          },
-          {
-            title: 'Advanced Patterns',
-            url: '/dashboard/forms/advanced',
-            icon: 'forms'
-          }
+          { title: 'Jobs', url: '/dashboard/jobs' },
+          { title: 'SOME ACTIVITES', url: '/dashboard/jobs/activities' }
         ]
       },
       {
-        title: 'React Query',
-        url: '/dashboard/react-query',
-        icon: 'code',
+        title: 'Applications',
+        url: '/dashboard/applications',
+        icon: 'post',
         isActive: false,
         items: []
       },
       {
-        title: 'Icons',
-        url: '/dashboard/elements/icons',
-        icon: 'palette',
+        title: 'Contacts',
+        url: '/dashboard/contacts',
+        icon: 'post',
         isActive: false,
         items: []
-      }
-    ]
-  },
-  {
-    label: '',
-    items: [
-      {
-        title: 'Pro',
-        url: '#',
-        icon: 'pro',
-        isActive: false,
-        items: [
-          {
-            title: 'Exclusive',
-            url: '/dashboard/exclusive',
-            icon: 'exclusive',
-            shortcut: ['e', 'e']
-          }
-        ]
       },
       {
-        title: 'Account',
-        url: '#',
-        icon: 'account',
-        isActive: true,
-        items: [
-          {
-            title: 'Profile',
-            url: '/dashboard/profile',
-            icon: 'profile',
-            shortcut: ['m', 'm']
-          },
-          {
-            title: 'Notifications',
-            url: '/dashboard/notifications',
-            icon: 'notification',
-            shortcut: ['n', 'n']
-          },
-          {
-            title: 'Billing',
-            url: '/dashboard/billing',
-            icon: 'billing',
-            shortcut: ['b', 'b'],
-            access: { requireOrg: true }
-          },
-          {
-            title: 'Login',
-            shortcut: ['l', 'l'],
-            url: '/',
-            icon: 'login'
-          }
-        ]
+        title: 'Media',
+        url: '/dashboard/media',
+        icon: 'product',
+        isActive: false,
+        items: []
       }
     ]
   }

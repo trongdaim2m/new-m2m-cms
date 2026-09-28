@@ -639,3 +639,103 @@
     -webkit-text-fill-color: currentColor;
   }
 }
+
+/* CMS TipTap editor */
+.cms-editor p.is-editor-empty:first-child::before {
+  color: var(--muted-foreground);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+  opacity: 0.7;
+}
+.cms-editor:focus {
+  outline: none;
+}
+.cms-editor mark {
+  background: color-mix(in oklch, #22aaff 35%, transparent);
+  border-radius: 0.2em;
+  padding: 0.05em 0.15em;
+}
+.cms-editor .ProseMirror-selectednode {
+  outline: 2px solid #22aaff;
+  outline-offset: 2px;
+}
+
+.cms-editor .cms-image-row,
+.cms-editor .cms-image-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.875rem;
+  margin: 1rem 0;
+  width: 100%;
+}
+@media (max-width: 639px) {
+  .cms-editor .cms-image-row,
+  .cms-editor .cms-image-grid {
+    flex-direction: column;
+  }
+}
+.cms-editor .cms-image-row > .cms-image-node,
+.cms-editor .cms-image-grid > .cms-image-node,
+.cms-editor .cms-image-row > .react-renderer,
+.cms-editor .cms-image-grid > .react-renderer {
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto !important;
+  max-width: 100%;
+  margin: 0;
+}
+/* 1 ảnh trong hàng: không stretch — dùng width % và căn giữa */
+.cms-editor .cms-image-row > .cms-image-node:only-child,
+.cms-editor .cms-image-row > .react-renderer:only-child,
+.cms-editor .cms-image-grid > .cms-image-node:only-child,
+.cms-editor .cms-image-grid > .react-renderer:only-child {
+  flex: 0 1 auto;
+  width: 100%;
+}
+.cms-editor .cms-image-row .cms-resizable-image,
+.cms-editor .cms-image-grid .cms-resizable-image {
+  margin: 0;
+}
+.cms-editor .cms-image-row > :not(:only-child) .cms-resizable-image,
+.cms-editor .cms-image-grid > :not(:only-child) .cms-resizable-image {
+  width: 100% !important;
+  aspect-ratio: 16 / 10;
+}
+.cms-editor .cms-image-row > :not(:only-child) .cms-resizable-image img,
+.cms-editor .cms-image-grid > :not(:only-child) .cms-resizable-image img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.cms-editor .react-renderer.node-image,
+.cms-editor .cms-image-node {
+  display: block;
+  max-width: 100%;
+  line-height: 0;
+}
+.cms-editor .cms-resizable-image {
+  display: block;
+  max-width: 100%;
+  line-height: 0;
+  box-sizing: border-box;
+}
+.cms-editor .cms-resizable-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+}
+.cms-editor .ProseMirror-selectednode.cms-resizable-image,
+.cms-editor .cms-resizable-image.ProseMirror-selectednode {
+  outline: none;
+}
+.cms-editor img {
+  max-width: 100%;
+  height: auto;
+}

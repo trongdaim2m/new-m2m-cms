@@ -1,12 +1,12 @@
-import { auth } from '@clerk/nextjs/server';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { CMS_TOKEN_COOKIE } from '@/lib/cms-auth';
 
 export default async function Page() {
-  const { userId } = await auth();
-
-  if (!userId) {
-    return redirect('/auth/sign-in');
-  } else {
-    redirect('/dashboard/overview');
+  const cookieStore = await cookies();
+  const token = cookieStore.get(CMS_TOKEN_COOKIE)?.value;
+  if (!token) {
+    redirect('/auth/cms-login');
   }
+  redirect('/dashboard/news');
 }

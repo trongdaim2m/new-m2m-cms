@@ -1,56 +1,59 @@
 'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { UserAvatarProfile } from '@/components/user-avatar-profile';
-import { SignOutButton, useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
 export function UserNav() {
-  const { user } = useUser();
   const router = useRouter();
-  if (user) {
-    return (
-      <DropdownMenu>
-        <DropdownMenuTrigger
-          render={<Button variant='ghost' className='relative h-8 w-8 rounded-full' />}
-        >
-          <UserAvatarProfile user={user} />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent className='w-56' align='end' sideOffset={10}>
-          <DropdownMenuGroup>
-            <DropdownMenuLabel className='font-normal'>
-              <div className='flex flex-col space-y-1'>
-                <p className='text-sm leading-none font-medium'>{user.fullName}</p>
-                <p className='text-muted-foreground text-xs leading-none'>
-                  {user.emailAddresses[0].emailAddress}
-                </p>
-              </div>
-            </DropdownMenuLabel>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem onClick={() => router.push('/dashboard/profile')}>
-              Profile
-            </DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>New Team</DropdownMenuItem>
-          </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <SignOutButton redirectUrl='/auth/sign-in' />
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    );
+  const [label, setLabel] = useState('CMS Admin');
+
+  useEffect(() => {
+    try {
+      const raw = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('m2m_cms_user='))
+        ?.split('=')
+        .slice(1)
+        .join('=');
+      if (raw) {
+        const user = JSON.parse(decodeURIComponent(raw)) as {
+          name?: string;
+          email?: string;
+        };
+        setLabel(user.name || user.email || 'CMS Admin');
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  async function logout() {
+    await fetch('/api/cms/logout', { method: 'POST' });
+    router.replace('/auth/cms-login');
+    router.refresh();
   }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={<Button variant='ghost' className='relative h-8 rounded-full px-3' />}
+      >
+        {label}
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className='w-56' align='end' sideOffset={10}>
+        <DropdownMenuLabel>{label}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => void logout()}>Sign out</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 }
