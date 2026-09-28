@@ -18,10 +18,13 @@ export async function POST(request: Request) {
   }
 
   const { accessToken, user } = json.data;
-  // Browsers drop `secure` cookies over plain HTTP, so COOKIE_SECURE=false is needed until HTTPS is set up.
+  // Browsers drop `secure` cookies over plain HTTP, so only mark them secure when the request came in over HTTPS.
+  const protocol =
+    request.headers.get('x-forwarded-proto')?.split(',')[0].trim() ||
+    new URL(request.url).protocol.replace(':', '');
   const secure = process.env.COOKIE_SECURE
     ? process.env.COOKIE_SECURE === 'true'
-    : process.env.NODE_ENV === 'production';
+    : protocol === 'https';
   const response = NextResponse.json({ success: true, data: { user } });
   response.cookies.set(CMS_TOKEN_COOKIE, accessToken, {
     httpOnly: true,
