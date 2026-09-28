@@ -18,19 +18,23 @@ export async function POST(request: Request) {
   }
 
   const { accessToken, user } = json.data;
+  // Browsers drop `secure` cookies over plain HTTP, so COOKIE_SECURE=false is needed until HTTPS is set up.
+  const secure = process.env.COOKIE_SECURE
+    ? process.env.COOKIE_SECURE === 'true'
+    : process.env.NODE_ENV === 'production';
   const response = NextResponse.json({ success: true, data: { user } });
   response.cookies.set(CMS_TOKEN_COOKIE, accessToken, {
     httpOnly: true,
     sameSite: 'lax',
     path: '/',
-    secure: process.env.NODE_ENV === 'production',
+    secure,
     maxAge: 60 * 60 * 24 * 7
   });
   response.cookies.set(CMS_USER_COOKIE, JSON.stringify(user), {
     httpOnly: false,
     sameSite: 'lax',
     path: '/',
-    secure: process.env.NODE_ENV === 'production',
+    secure,
     maxAge: 60 * 60 * 24 * 7
   });
   return response;
