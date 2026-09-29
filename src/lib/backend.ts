@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 import { CMS_TOKEN_COOKIE, getApiBaseUrl } from '@/lib/cms-auth';
 
 type BackendEnvelope<T> = {
@@ -27,6 +28,10 @@ export async function backendFetch<T>(
     headers,
     cache: 'no-store'
   });
+
+  if (res.status === 401) {
+    redirect('/api/cms/logout');
+  }
 
   const json = (await res.json()) as BackendEnvelope<T>;
   if (!res.ok || json.success === false) {
