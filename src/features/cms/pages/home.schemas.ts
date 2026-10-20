@@ -111,7 +111,12 @@ export const HOME_SECTION_SCHEMAS: SectionSchema[] = [
               vision: 'Camera / Vision'
             })
           },
-          { type: 'image', key: 'imageUrl', label: 'Ảnh thumbnail (tuỳ chọn)', hint: IMAGE_HINT }
+          {
+            type: 'image',
+            key: 'imageUrl',
+            label: 'Ảnh thumbnail (hover)',
+            hint: 'Hiện góc phải card khi hover. Để trống sẽ dùng ảnh mặc định theo icon.'
+          }
         ]
       }
     ]
@@ -207,7 +212,8 @@ export const HOME_SECTION_SCHEMAS: SectionSchema[] = [
   {
     key: 'why',
     title: 'Why M&M Solutions',
-    description: 'Các điểm mạnh; xuống dòng trong tiêu đề để ngắt dòng trên web.',
+    description:
+      'Các điểm mạnh; xuống dòng trong tiêu đề để ngắt dòng. Mô tả hiện khi hover card.',
     fields: [
       { type: 'text', key: 'title', label: 'Tiêu đề section', localized: true },
       {
@@ -216,7 +222,13 @@ export const HOME_SECTION_SCHEMAS: SectionSchema[] = [
         label: 'Điểm mạnh',
         itemLabel: 'Điểm mạnh',
         titleKey: 'title',
-        newItem: () => ({ title: L(), icon: 'platform', imageUrl: '' }),
+        newItem: () => ({
+          title: L(),
+          description: L(),
+          icon: 'platform',
+          imageUrl: '',
+          hoverImageUrl: ''
+        }),
         fields: [
           {
             type: 'text',
@@ -225,6 +237,14 @@ export const HOME_SECTION_SCHEMAS: SectionSchema[] = [
             localized: true,
             multiline: true,
             hint: 'Mỗi dòng hiển thị trên 1 dòng riêng.'
+          },
+          {
+            type: 'text',
+            key: 'description',
+            label: 'Mô tả (hover)',
+            localized: true,
+            multiline: true,
+            hint: 'Hiện dưới tiêu đề khi hover card trên desktop.'
           },
           {
             type: 'select',
@@ -236,7 +256,18 @@ export const HOME_SECTION_SCHEMAS: SectionSchema[] = [
               commitment: 'Mục tiêu / cam kết'
             })
           },
-          { type: 'image', key: 'imageUrl', label: 'Ảnh minh hoạ (tuỳ chọn)', hint: IMAGE_HINT }
+          {
+            type: 'image',
+            key: 'imageUrl',
+            label: 'Ảnh minh hoạ',
+            hint: 'Ảnh khi card chưa hover. Để trống sẽ dùng ảnh mặc định theo icon.'
+          },
+          {
+            type: 'image',
+            key: 'hoverImageUrl',
+            label: 'Ảnh khi hover',
+            hint: 'Bản minh hoạ trên nền xanh. Để trống sẽ dùng ảnh mặc định theo icon.'
+          }
         ]
       }
     ]

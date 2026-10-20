@@ -4,7 +4,8 @@ export const ABOUT_SECTION_SCHEMAS: SectionSchema[] = [
   {
     key: 'hero',
     title: 'Hero',
-    description: 'Slogan và bộ ảnh collage; desktop chia ảnh thành từng nhóm 5 ảnh cuộn lần lượt.',
+    description:
+      'Slogan cố định. 15 ảnh (3 nhóm × 5) chạy theo thứ tự danh sách khi cuộn: ảnh 1–5 nhóm 1, 6–10 nhóm 2, 11–15 nhóm 3.',
     fields: [
       {
         type: 'text',
@@ -20,7 +21,7 @@ export const ABOUT_SECTION_SCHEMAS: SectionSchema[] = [
         label: 'Ảnh collage',
         itemLabel: 'Ảnh',
         titleKey: 'alt',
-        hint: 'Nên dùng bội số của 5 (VD: 10, 15) để mỗi nhóm trên desktop đủ 5 ảnh.',
+        hint: 'Đúng 15 ảnh, theo thứ tự. Vị trí trên màn hình do giao diện quyết định; CMS chỉ quản lý ảnh và mô tả.',
         newItem: () => ({ imageUrl: '', alt: L() }),
         fields: [
           { type: 'image', key: 'imageUrl', label: 'Ảnh' },
@@ -40,7 +41,14 @@ export const ABOUT_SECTION_SCHEMAS: SectionSchema[] = [
         label: 'Tiêu đề (ẩn, dùng cho accessibility)',
         localized: true
       },
-      { type: 'text', key: 'message', label: 'Lời nhắn', localized: true, multiline: true },
+      {
+        type: 'text',
+        key: 'message',
+        label: 'Lời nhắn',
+        localized: true,
+        multiline: true,
+        hint: 'Đoạn đầu là câu dẫn. Các đoạn sau cách nhau bằng một dòng trống.'
+      },
       { type: 'text', key: 'signature', label: 'Chức danh & tên', localized: true },
       { type: 'image', key: 'imageUrl', label: 'Ảnh chân dung' },
       { type: 'text', key: 'imageAlt', label: 'Mô tả ảnh (alt)', localized: true },
