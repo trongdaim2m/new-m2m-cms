@@ -25,6 +25,10 @@ export const metadata: Metadata = {
   },
   description:
     'Free, open source admin dashboard starter built with Next.js 16, shadcn/ui, Tailwind CSS, and TypeScript.',
+  icons: {
+    icon: [{ url: '/icon.png', sizes: '32x32', type: 'image/png' }],
+    apple: [{ url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }]
+  },
   openGraph: {
     title: 'Shadcn Dashboard - Next.js Admin Dashboard Template',
     description:
