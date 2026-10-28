@@ -12,7 +12,8 @@ export const navGroups: NavGroup[] = [
         isActive: false,
         items: [
           { title: 'Homepage', url: '/dashboard/pages/home' },
-          { title: 'About', url: '/dashboard/pages/about' }
+          { title: 'About', url: '/dashboard/pages/about' },
+          { title: 'Technology', url: '/dashboard/pages/technology' }
         ]
       },
       {
@@ -57,6 +58,13 @@ export const navGroups: NavGroup[] = [
         title: 'Media',
         url: '/dashboard/media',
         icon: 'product',
+        isActive: false,
+        items: []
+      },
+      {
+        title: 'Profile PDFs',
+        url: '/dashboard/profile-documents',
+        icon: 'post',
         isActive: false,
         items: []
       }

@@ -28,14 +28,28 @@ async function proxy(request: NextRequest, path: string[]) {
     init.body = await request.arrayBuffer();
   }
 
-  const upstream = await fetch(target, init);
-  const text = await upstream.text();
-  return new NextResponse(text, {
-    status: upstream.status,
-    headers: {
-      'Content-Type': upstream.headers.get('Content-Type') || 'application/json'
-    }
-  });
+  try {
+    const upstream = await fetch(target, init);
+    const text = await upstream.text();
+    return new NextResponse(text, {
+      status: upstream.status,
+      headers: {
+        'Content-Type': upstream.headers.get('Content-Type') || 'application/json'
+      }
+    });
+  } catch (err) {
+    const base = getApiBaseUrl();
+    const message =
+      err instanceof Error && (err.cause as NodeJS.ErrnoException)?.code === 'ECONNREFUSED'
+        ? `Cannot reach CMS API at ${base}. Start new-backend (port 4000) and retry.`
+        : err instanceof Error
+          ? err.message
+          : 'Upstream fetch failed';
+    return NextResponse.json(
+      { success: false, error: { code: 'UPSTREAM_UNAVAILABLE', message } },
+      { status: 502 }
+    );
+  }
 }
 
 type Ctx = { params: Promise<{ path: string[] }> };
@@ -51,6 +65,11 @@ export async function POST(request: NextRequest, ctx: Ctx) {
 }
 
 export async function PATCH(request: NextRequest, ctx: Ctx) {
+  const { path } = await ctx.params;
+  return proxy(request, path);
+}
+
+export async function PUT(request: NextRequest, ctx: Ctx) {
   const { path } = await ctx.params;
   return proxy(request, path);
 }

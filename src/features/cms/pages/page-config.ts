@@ -1,5 +1,6 @@
 import { ABOUT_SECTION_SCHEMAS } from './about.schemas';
 import { HOME_SECTION_SCHEMAS } from './home.schemas';
+import { TECHNOLOGY_SECTION_SCHEMAS } from './technology.schemas';
 import type { SectionSchema } from './section-schema';
 
 type PageConfig = {
@@ -18,6 +19,12 @@ export const PAGE_CONFIGS: Record<string, PageConfig> = {
     title: 'About',
     description: 'Sắp xếp, ẩn/hiện và chỉnh sửa nội dung các section trang About (JA / EN / VI).',
     sections: ABOUT_SECTION_SCHEMAS
+  },
+  technology: {
+    title: 'Technology',
+    description:
+      'Sắp xếp, ẩn/hiện và chỉnh sửa nội dung trang Technology (JA / EN / VI).',
+    sections: TECHNOLOGY_SECTION_SCHEMAS
   }
 };
 
