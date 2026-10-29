@@ -2,7 +2,7 @@ import { L, opts, type SectionSchema } from './section-schema';
 
 const featureLine = () => ({ text: L() });
 
-const visionTab = (id: 'polygon' | 'ivr' | 'game') => ({
+const visionTab = (id: 'polygon' | 'ivr' | 'assist') => ({
   id,
   label: id === 'polygon' ? 'POLYGON VISIO' : id === 'ivr' ? 'AI IVR SYSTEM' : 'POLYGON VISIO ASSIST',
   title: id === 'polygon' ? 'POLYGON VISIO' : id === 'ivr' ? 'AI IVR SYSTEM' : 'POLYGON VISIO ASSIST',
@@ -101,7 +101,7 @@ export const TECHNOLOGY_SECTION_SCHEMAS: SectionSchema[] = [
         label: 'Tab',
         itemLabel: 'Tab',
         titleKey: 'label',
-        hint: 'Khuyến nghị 3 tab với id polygon, ivr, game.',
+        hint: 'Khuyến nghị 3 tab với id polygon, ivr, assist.',
         newItem: () => visionTab('polygon'),
         fields: [
           {
@@ -109,9 +109,9 @@ export const TECHNOLOGY_SECTION_SCHEMAS: SectionSchema[] = [
             key: 'id',
             label: 'ID tab',
             options: opts({
-              polygon: 'polygon',
-              ivr: 'ivr',
-              game: 'POLYGON VISIO ASSIST (id: game)',
+              polygon: 'POLYGON VISIO',
+              ivr: 'AI IVR SYSTEM',
+              assist: 'POLYGON VISIO ASSIST',
             })
           },
           { type: 'text', key: 'label', label: 'Nhãn tab' },
