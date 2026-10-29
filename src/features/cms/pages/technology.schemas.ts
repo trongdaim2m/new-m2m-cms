@@ -108,7 +108,11 @@ export const TECHNOLOGY_SECTION_SCHEMAS: SectionSchema[] = [
             type: 'select',
             key: 'id',
             label: 'ID tab',
-            options: opts({ polygon: 'polygon', ivr: 'ivr', game: 'game' })
+            options: opts({
+              polygon: 'polygon',
+              ivr: 'ivr',
+              game: 'POLYGON VISIO ASSIST (id: game)',
+            })
           },
           { type: 'text', key: 'label', label: 'Nhãn tab' },
           { type: 'text', key: 'title', label: 'Tiêu đề panel' },
