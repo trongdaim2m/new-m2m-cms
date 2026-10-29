@@ -4,8 +4,8 @@ const featureLine = () => ({ text: L() });
 
 const visionTab = (id: 'polygon' | 'ivr' | 'game') => ({
   id,
-  label: id === 'polygon' ? 'POLYGON VISIO' : id === 'ivr' ? 'AI IVR SYSTEM' : 'VIDEO GAME',
-  title: id === 'polygon' ? 'POLYGON VISIO' : id === 'ivr' ? 'AI IVR SYSTEM' : 'VIDEO GAME',
+  label: id === 'polygon' ? 'POLYGON VISIO' : id === 'ivr' ? 'AI IVR SYSTEM' : 'POLYGON VISIO ASSIST',
+  title: id === 'polygon' ? 'POLYGON VISIO' : id === 'ivr' ? 'AI IVR SYSTEM' : 'POLYGON VISIO ASSIST',
   imageUrl: '',
   description: L(),
   features: [featureLine(), featureLine(), featureLine(), featureLine()],
@@ -90,7 +90,7 @@ export const TECHNOLOGY_SECTION_SCHEMAS: SectionSchema[] = [
   {
     key: 'polygonVisio',
     title: 'Vision Automation',
-    description: 'POLYGON VISION TECHNOLOGY và các tab POLYGON / IVR / VIDEO GAME.',
+    description: 'POLYGON VISION TECHNOLOGY và các tab POLYGON / IVR / POLYGON VISIO ASSIST.',
     fields: [
       { type: 'text', key: 'heading', label: 'Tiêu đề section', localized: true },
       { type: 'text', key: 'intro', label: 'Đoạn mở đầu', localized: true, multiline: true },
