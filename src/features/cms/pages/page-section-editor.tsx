@@ -316,8 +316,12 @@ function FieldRenderer({ field, value, locale, onChange }: FieldRendererProps) {
 
     case 'image':
       return (
-        <FieldShell label={field.label} hint={field.hint}>
-          <MediaUrlField value={typeof value === 'string' ? value : ''} onChange={onChange} />
+        <FieldShell label={field.label} hint={field.hint} localized={field.localized}>
+          {field.localized ? (
+            <LocalizedImageInput value={toLocalized(value)} locale={locale} onChange={onChange} />
+          ) : (
+            <MediaUrlField value={typeof value === 'string' ? value : ''} onChange={onChange} />
+          )}
         </FieldShell>
       );
 
@@ -576,6 +580,30 @@ function FieldShell({
       </div>
       {children}
       {hint ? <p className='text-xs text-muted-foreground'>{hint}</p> : null}
+    </div>
+  );
+}
+
+function LocalizedImageInput({
+  value,
+  locale,
+  onChange
+}: {
+  value: LocalizedText;
+  locale: ContentLocale;
+  onChange: (value: LocalizedText) => void;
+}) {
+  const current = value[locale] ?? '';
+  const reference = locale === 'ja' ? '' : value.ja;
+
+  return (
+    <div className='space-y-1'>
+      <MediaUrlField value={current} onChange={(url) => onChange({ ...value, [locale]: url })} />
+      {reference && !current.trim() ? (
+        <p className='truncate text-[11px] text-muted-foreground'>
+          <span className='font-semibold'>Đang dùng ảnh JA:</span> {reference}
+        </p>
+      ) : null}
     </div>
   );
 }

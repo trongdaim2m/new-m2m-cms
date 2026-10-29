@@ -30,7 +30,7 @@ export type FieldDef =
       optionsFrom?: { listKey: string; valueKey: string; labelKey: string };
       hint?: string;
     }
-  | { type: 'image'; key: string; label: string; hint?: string }
+  | { type: 'image'; key: string; label: string; hint?: string; localized?: boolean }
   | { type: 'group'; key: string; label: string; fields: FieldDef[] }
   | { type: 'localizedList'; key: string; label: string; hint?: string }
   | {

@@ -1,12 +1,20 @@
-import { L, opts, type SectionSchema } from './section-schema';
+import { L, opts, type FieldDef, type SectionSchema } from './section-schema';
 
 const featureLine = () => ({ text: L() });
+
+const BACK_IMAGE_HINT = 'Có ảnh mặt sau thì website hiển thị slide 2 ảnh (mặt trước / mặt sau).';
+
+const frontBackImages = (frontKey: string, backKey: string, subject: string): FieldDef[] => [
+  { type: 'image', key: frontKey, label: `${subject} — mặt trước`, localized: true },
+  { type: 'image', key: backKey, label: `${subject} — mặt sau`, localized: true, hint: BACK_IMAGE_HINT }
+];
 
 const visionTab = (id: 'polygon' | 'ivr' | 'assist') => ({
   id,
   label: id === 'polygon' ? 'POLYGON VISIO' : id === 'ivr' ? 'AI IVR SYSTEM' : 'POLYGON VISIO ASSIST',
   title: id === 'polygon' ? 'POLYGON VISIO' : id === 'ivr' ? 'AI IVR SYSTEM' : 'POLYGON VISIO ASSIST',
-  imageUrl: '',
+  imageUrl: L(),
+  backImageUrl: L(),
   description: L(),
   features: [featureLine(), featureLine(), featureLine(), featureLine()],
 });
@@ -17,7 +25,7 @@ export const TECHNOLOGY_SECTION_SCHEMAS: SectionSchema[] = [
     title: 'Hero',
     description: 'Banner TECHNOLOGY, mô tả và mục lục anchor.',
     fields: [
-      { type: 'image', key: 'backgroundImageUrl', label: 'Ảnh nền' },
+      { type: 'image', key: 'backgroundImageUrl', label: 'Ảnh nền', localized: true },
       { type: 'text', key: 'description', label: 'Mô tả', localized: true, multiline: true },
       {
         type: 'text',
@@ -45,7 +53,7 @@ export const TECHNOLOGY_SECTION_SCHEMAS: SectionSchema[] = [
     description: 'Section Physical AI với accordion tính năng.',
     fields: [
       { type: 'text', key: 'description', label: 'Mô tả', localized: true, multiline: true },
-      { type: 'image', key: 'imageUrl', label: 'Ảnh minh họa' },
+      ...frontBackImages('imageUrl', 'backImageUrl', 'Ảnh minh họa'),
       { type: 'text', key: 'imageAlt', label: 'Mô tả ảnh (alt)', localized: true },
       {
         type: 'list',
@@ -116,7 +124,7 @@ export const TECHNOLOGY_SECTION_SCHEMAS: SectionSchema[] = [
           },
           { type: 'text', key: 'label', label: 'Nhãn tab' },
           { type: 'text', key: 'title', label: 'Tiêu đề panel' },
-          { type: 'image', key: 'imageUrl', label: 'Ảnh panel' },
+          ...frontBackImages('imageUrl', 'backImageUrl', 'Ảnh panel'),
           { type: 'text', key: 'description', label: 'Mô tả', localized: true, multiline: true },
           {
             type: 'list',
@@ -136,7 +144,7 @@ export const TECHNOLOGY_SECTION_SCHEMAS: SectionSchema[] = [
     title: 'AI Camera',
     description: 'Banner AI Camera với tagline, badge và CTA.',
     fields: [
-      { type: 'image', key: 'backgroundImageUrl', label: 'Ảnh nền' },
+      { type: 'image', key: 'backgroundImageUrl', label: 'Ảnh nền', localized: true },
       { type: 'text', key: 'tagline', label: 'Tagline', localized: true, multiline: true },
       {
         type: 'list',
@@ -158,10 +166,10 @@ export const TECHNOLOGY_SECTION_SCHEMAS: SectionSchema[] = [
     fields: [
       { type: 'text', key: 'sectionLabel', label: 'Nhãn section (accessibility)', localized: true },
       { type: 'text', key: 'ivrDescription', label: 'Mô tả AI-IVR', localized: true, multiline: true },
-      { type: 'image', key: 'ivrImageUrl', label: 'Ảnh AI-IVR' },
+      ...frontBackImages('ivrImageUrl', 'ivrBackImageUrl', 'Ảnh AI-IVR'),
       { type: 'text', key: 'ivrImageAlt', label: 'Alt ảnh IVR', localized: true },
       { type: 'text', key: 'agentDescription', label: 'Mô tả AI-Agent', localized: true, multiline: true },
-      { type: 'image', key: 'agentImageUrl', label: 'Ảnh AI-Agent' },
+      ...frontBackImages('agentImageUrl', 'agentBackImageUrl', 'Ảnh AI-Agent'),
       { type: 'text', key: 'agentImageAlt', label: 'Alt ảnh Agent', localized: true }
     ]
   }
