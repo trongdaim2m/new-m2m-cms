@@ -373,6 +373,32 @@ export const HOME_SECTION_SCHEMAS: SectionSchema[] = [
     ]
   },
   {
+    key: 'partners',
+    title: 'Our Partners',
+    description: 'Logo các công ty đối tác, hiển thị gần cuối trang chủ.',
+    fields: [
+      { type: 'text', key: 'title', label: 'Tiêu đề', localized: true },
+      {
+        type: 'list',
+        key: 'items',
+        label: 'Logo đối tác',
+        itemLabel: 'Đối tác',
+        titleKey: 'name',
+        newItem: () => ({ name: '', imageUrl: '', href: '' }),
+        fields: [
+          { type: 'text', key: 'name', label: 'Tên công ty (dùng cho alt)' },
+          { type: 'image', key: 'imageUrl', label: 'Logo', hint: 'Nên dùng PNG/SVG nền trong suốt.' },
+          {
+            type: 'text',
+            key: 'href',
+            label: 'Link website (tuỳ chọn)',
+            hint: 'VD: https://www.fujisoft.co.jp — để trống nếu không cần link.'
+          }
+        ]
+      }
+    ]
+  },
+  {
     key: 'contact',
     title: 'Get In Touch',
     description: 'Tiêu đề, mô tả và toàn bộ nhãn của form liên hệ.',
