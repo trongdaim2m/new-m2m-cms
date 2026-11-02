@@ -6,6 +6,13 @@ import { toast } from 'sonner';
 
 type MediaItem = { id: string; url: string; filename: string; mimeType: string };
 
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || '').replace(/\/$/, '');
+
+/** Default CMS images are relative paths served by the public website, not by this admin app. */
+function previewSrc(url: string) {
+  return SITE_URL && url.startsWith('/') && !url.startsWith('//') ? `${SITE_URL}${url}` : url;
+}
+
 function parseMediaList(json: { data?: unknown }): MediaItem[] {
   const raw = json.data;
   if (Array.isArray(raw)) return raw as MediaItem[];
@@ -68,7 +75,7 @@ export function MediaUrlField({ value, onChange }: MediaUrlFieldProps) {
         {value ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            src={value}
+            src={previewSrc(value)}
             alt=''
             className='size-16 shrink-0 rounded border border-border bg-muted object-contain'
           />
