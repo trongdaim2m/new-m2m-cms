@@ -17,6 +17,11 @@ type MediaCoverPickerProps = {
   onChange: (mediaId: string | undefined, previewUrl?: string | null) => void;
   /** Fired after a library item is deleted on the server */
   onMediaDeleted?: (mediaId: string) => void;
+  label?: string;
+  hint?: string;
+  emptyLabel?: string;
+  removeLabel?: string;
+  previewClassName?: string;
 };
 
 function parseMediaList(json: { data?: unknown }) {
@@ -32,7 +37,12 @@ export function MediaCoverPicker({
   value,
   previewUrl,
   onChange,
-  onMediaDeleted
+  onMediaDeleted,
+  label = 'Cover image',
+  hint,
+  emptyLabel = 'No cover selected',
+  removeLabel = 'Remove cover',
+  previewClassName = 'h-32 w-full'
 }: MediaCoverPickerProps) {
   const [items, setItems] = useState<MediaItem[]>([]);
   const [loadingList, setLoadingList] = useState(true);
@@ -58,7 +68,7 @@ export function MediaCoverPicker({
 
   async function onUpload(file: File) {
     setUploading(true);
-    const toastId = toast.loading('Đang upload cover…');
+    const toastId = toast.loading('Đang upload ảnh…');
     try {
       const body = new FormData();
       body.append('file', file);
@@ -73,7 +83,7 @@ export function MediaCoverPicker({
       const media = json.data as MediaItem;
       onChange(media.id, media.url);
       await refresh();
-      toast.success('Đã upload cover', { id: toastId });
+      toast.success('Đã upload ảnh', { id: toastId });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Upload thất bại', {
         id: toastId
@@ -109,7 +119,7 @@ export function MediaCoverPicker({
 
   function onRemoveCover() {
     onChange(undefined, null);
-    toast.success('Đã bỏ cover — nhớ Save để lưu');
+    toast.success('Đã bỏ ảnh — nhớ Save để lưu');
   }
 
   const busy = uploading || deletingId != null;
@@ -126,7 +136,7 @@ export function MediaCoverPicker({
       ) : null}
 
       <div className='flex items-center justify-between gap-3'>
-        <span className='text-sm font-medium'>Cover image</span>
+        <span className='text-sm font-medium'>{label}</span>
         <label
           className={`inline-flex cursor-pointer items-center gap-1.5 rounded-md bg-muted px-3 py-1.5 text-xs font-medium hover:bg-muted/80 ${
             uploading ? 'pointer-events-none opacity-60' : ''
@@ -148,12 +158,16 @@ export function MediaCoverPicker({
         </label>
       </div>
 
+      {hint ? <p className='text-xs text-muted-foreground'>{hint}</p> : null}
+
       {previewUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={previewUrl} alt='' className='h-32 w-full rounded object-cover' />
+        <img src={previewUrl} alt='' className={`${previewClassName} rounded object-cover`} />
       ) : (
-        <div className='flex h-32 items-center justify-center rounded bg-muted text-xs text-muted-foreground'>
-          No cover selected
+        <div
+          className={`${previewClassName} flex items-center justify-center rounded bg-muted text-xs text-muted-foreground`}
+        >
+          {emptyLabel}
         </div>
       )}
 
@@ -164,7 +178,7 @@ export function MediaCoverPicker({
           disabled={busy}
           onClick={onRemoveCover}
         >
-          Remove cover
+          {removeLabel}
         </button>
       ) : null}
 

@@ -66,6 +66,8 @@ export function NewsEditorForm({ articleId }: Props) {
   const [categoryId, setCategoryId] = useState('');
   const [coverMediaId, setCoverMediaId] = useState<string | undefined>();
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
+  const [previewMediaId, setPreviewMediaId] = useState<string | undefined>();
+  const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
   const [isFeatured, setIsFeatured] = useState(false);
   const [status, setStatus] = useState<'draft' | 'published'>('draft');
   const [publishedDate, setPublishedDate] = useState('');
@@ -116,6 +118,8 @@ export function NewsEditorForm({ articleId }: Props) {
           setCategoryId(article.categoryId || '');
           setCoverMediaId(article.coverMediaId || undefined);
           setCoverPreview(article.coverMedia?.url || null);
+          setPreviewMediaId(article.previewMediaId || undefined);
+          setPreviewImageUrl(article.previewMedia?.url || null);
           setIsFeatured(Boolean(article.isFeatured));
           setStatus(article.status === 'published' ? 'published' : 'draft');
           setLoadedPublishedAt(article.publishedAt || null);
@@ -157,7 +161,8 @@ export function NewsEditorForm({ articleId }: Props) {
         isFeatured,
         status,
         publishedAt: resolvePublishedAt(),
-        coverMediaId: coverMediaId ?? null
+        coverMediaId: coverMediaId ?? null,
+        previewMediaId: previewMediaId ?? null
       };
 
       const res = await fetch(articleId ? `/api/cms/news/${articleId}` : '/api/cms/news', {
@@ -172,7 +177,7 @@ export function NewsEditorForm({ articleId }: Props) {
       await flushPendingMediaDeletes(
         pendingMediaDeletes.current,
         CONTENT_LOCALES.map((item) => content[item.code].contentHtml),
-        coverMediaId ? [coverMediaId] : []
+        [coverMediaId, previewMediaId].filter((id): id is string => Boolean(id))
       );
       pendingMediaDeletes.current.clear();
       toast.success(articleId ? 'Đã cập nhật bài viết' : 'Đã tạo bài viết', {
@@ -264,6 +269,29 @@ export function NewsEditorForm({ articleId }: Props) {
             if (coverMediaId === mediaId) {
               setCoverMediaId(undefined);
               setCoverPreview(null);
+            }
+          }}
+        />
+        <MediaCoverPicker
+          label='Ảnh preview (tin nổi bật trang News)'
+          hint='Ảnh vuông 1:1 (vd. 800×800), cắt phần nội dung chính. Để trống sẽ dùng ảnh cover.'
+          emptyLabel='Chưa chọn — đang dùng ảnh cover'
+          removeLabel='Bỏ ảnh preview'
+          previewClassName='size-40'
+          value={previewMediaId}
+          previewUrl={previewImageUrl}
+          onChange={(id, url) => {
+            if (previewMediaId && previewMediaId !== id) {
+              pendingMediaDeletes.current.add(previewMediaId);
+            }
+            setPreviewMediaId(id);
+            setPreviewImageUrl(url || null);
+          }}
+          onMediaDeleted={(mediaId) => {
+            pendingMediaDeletes.current.delete(mediaId);
+            if (previewMediaId === mediaId) {
+              setPreviewMediaId(undefined);
+              setPreviewImageUrl(null);
             }
           }}
         />
